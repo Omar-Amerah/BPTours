@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "451015266080",
+    "project_id": "blackpooltours-64293",
+    "storage_bucket": "blackpooltours-64293.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451015266080:android:8306f5606842733c151145",
+        "android_client_info": {
+          "package_name": "com.anonymous.Blackpool"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyT6JcRa_Gl4SqeAKd-0cnkeR47D2MWjo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
