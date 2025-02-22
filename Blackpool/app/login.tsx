@@ -1,19 +1,35 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router'; 
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = () => {
-    if (email && password) {
-      console.log('Email:', email);
-      console.log('Password:', password);
-      router.replace('/(tabs)'); 
-    } else {
+  const handleLogin = async () => {
+    if (!email || !password) {
       alert('Please enter email and password');
+      return;
+    }
+    setLoading(true);
+    const auth = getAuth();
+
+    try{
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      console.log('User logged in:', userCredential.user);
+      alert('Login successful!');
+      router.replace("/(tabs)"); 
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('Login error:', error.message);
+        alert(error.message);
+      } else {
+        console.error('Login error:', error);
+        alert('An unknown error occurred');
+      }
     }
   };
 
