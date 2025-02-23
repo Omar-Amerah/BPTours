@@ -33,11 +33,17 @@ export default function HomeScreen() {
   }, []);
 
   if (!weatherData) {
-    console.log("No weather data");
+    console.log('No weather data');
+    return (
+      <SafeAreaProvider>
+        <View style={styles.container}>
+          <Text>Loading weather data...</Text>
+        </View>
+      </SafeAreaProvider>
+    );
   }
 
   const weatherToday = weatherData.list[0];
-  console.log(weatherToday);
   const nextDaysData = weatherData.list.slice(1, 6);
 
   return (
@@ -66,6 +72,7 @@ export default function HomeScreen() {
           </View>
         </SafeAreaView>
         <SafeAreaView>
+          <SearchBar placeholder='Search for Tour...' style={styles.SearchBar} containerStyle={styles.searchBarContainer} inputContainerStyle={styles.searchBarInputContainer}></SearchBar>
         </SafeAreaView>
       </ScrollView>
     </SafeAreaProvider>
@@ -116,6 +123,22 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#555',
     marginTop: 5, 
+  },
+  SearchBar: {
+    backgroundColor: 'rgb(151, 223, 241)',
+    margin: 10,
+    borderRadius: 8,
+    color: 'black',
+  },
+  searchBarContainer: {
+    backgroundColor: 'transparent',
+    borderTopColor: 'transparent',
+    borderBottomColor: 'transparent',
+    borderWidth: 0,
+  },
+  searchBarInputContainer: {
+    backgroundColor: 'rgb(151, 223, 241)',
+    borderRadius: 8,
   },
 });
 
