@@ -14,9 +14,16 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: 'rgb(246, 148, 49)',
         headerShown: true, 
-        headerTitle: 'Home',
+        headerTitle: 'Blackpool Tours',
+        headerStyle: {
+          backgroundColor:'rgb(246, 148, 49)',
+        },
+        headerTitleStyle: {
+          fontSize: 25,
+        },
+        headerTintColor: 'white',
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({

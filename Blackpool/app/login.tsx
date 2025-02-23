@@ -30,6 +30,8 @@ export default function Login() {
         console.error('Login error:', error);
         alert('An unknown error occurred');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
