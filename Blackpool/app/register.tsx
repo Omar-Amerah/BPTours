@@ -9,6 +9,7 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+   //Register Function
   const handleRegister = async () => {
     if (!email || !password) {
       alert('Please enter email and password');
@@ -36,6 +37,7 @@ export default function Register() {
     }
   };
 
+  //Login Function
   const handleLoginRedirect = () => {
     router.replace('/login'); 
   };

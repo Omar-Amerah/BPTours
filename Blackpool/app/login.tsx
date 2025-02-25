@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { createContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router'; 
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+
+export const UserContext = createContext("null");
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  
   const router = useRouter();
 
+  //Login Function
   const handleLogin = async () => {
     if (!email || !password) {
       alert('Please enter email and password');
@@ -19,8 +23,9 @@ export default function Login() {
 
     try{
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      console.log('User logged in:', userCredential.user);
+      console.log('User logged in:', userCredential.user.uid);
       alert('Login successful!');
+      
       router.replace("/(tabs)"); 
     } catch (error) {
       if (error instanceof Error) {
@@ -35,6 +40,7 @@ export default function Login() {
     }
   };
 
+  //Redirect to Register Page
   const handleRegister = () => {
     router.push('/register');
   };
