@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
-import { useRouter } from "expo-router";
 import { SearchBar } from 'react-native-elements';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { UserContext } from '../_layout';
@@ -10,21 +9,72 @@ import { db } from '../_layout';
 const API_KEY = '50dbba07708435153998adee02d4a24e';
 
 export default function HomeScreen() {
+
+  const cardData = [
+    {
+      id: 1,
+      title: "Blackpool Illuminations Night Tour",
+      description: "Experience the magical Blackpool Illuminations from the comfort of our open-top bus. A guided evening tour showcasing the dazzling light displays along the famous promenade.",
+      availableDates: ["2025-03-10", "2025-03-15", "2025-03-20"],
+      price: 25
+    },
+    {
+      id: 2,
+      title: "Blackpool Tower & Heritage Walk",
+      description: "Discover the rich history of Blackpool with a guided walking tour, including a visit to the iconic Blackpool Tower and other historic landmarks.",
+      availableDates: ["2025-03-05", "2025-03-12", "2025-03-19"],
+      price: 30
+    },
+    {
+      id: 3,
+      title: "Pleasure Beach VIP Experience",
+      description: "Enjoy a thrilling day at Blackpool Pleasure Beach with fast-track access to rides, exclusive behind-the-scenes insights, and a delicious lunch included.",
+      availableDates: ["2025-03-08", "2025-03-14", "2025-03-22"],
+      price: 60
+    },
+    {
+      id: 4,
+      title: "Coastal Tram Ride & Fish and Chips",
+      description: "Take a relaxing tram ride along the Blackpool coastline, enjoying stunning sea views and ending the tour with a traditional fish and chips meal.",
+      availableDates: ["2025-03-06", "2025-03-13", "2025-03-21"],
+      price: 20
+    },
+    {
+      id: 5,
+      title: "Blackpool Zoo & Nature Walk",
+      description: "A family-friendly tour exploring Blackpool Zoo, where you’ll get up close with a variety of animals before enjoying a scenic nature walk.",
+      availableDates: ["2025-03-07", "2025-03-14", "2025-03-21"],
+      price: 35
+    }
+  ];
+  
+
     const [weatherData, setWeatherData] = useState(null);
-    const [isVisible, setIsVisible] = useState(false);
+    // const [isVisible, setIsVisible] = useState();
+    const [openDates, setOpenDates] = useState(Array(cardData.length).fill(false));
 
     const userContextValue = useContext(UserContext);
     console.log('User context value:', userContextValue);
 
-  //Function to Open/Close Tour Dates
-  const toggleVisible = () => {
-    setIsVisible(!isVisible);
+    //Function to Open/Close Tour Dates
+  //   const toggleVisible = () => {
+  //   setIsVisible(!isVisible);
+  // };
+
+  const toggleOpen = (index) => {
+    setOpenDates((prev) => {
+      const newState = [...prev];
+      newState[index] = !newState[index];
+      return newState;
+    });
   };
 
-  //Add new booked tour to Firestore
+    //Add new booked tour to Firestore
   const addBookedTour = async (tourData) => {
     try {
       const newTour = await addDoc(collection(db, "BookedTours"), tourData);
+      alert('Tour booked successfully for ' + tourData.TourDate + '!');
+      setIsVisible(false);
       console.log(newTour.id);
     } catch (error) {
       console.error(error);
@@ -65,44 +115,7 @@ export default function HomeScreen() {
   //Data for Weather and Cards
   const weatherToday = weatherData.list[0];
   const nextDaysData = weatherData.list.slice(1, 6);
-  const cardData = [
-    {
-      id: 1,
-      title: "Blackpool Illuminations Night Tour",
-      description: "Experience the magical Blackpool Illuminations from the comfort of our open-top bus. A guided evening tour showcasing the dazzling light displays along the famous promenade.",
-      availableDates: ["2025-03-10", "2025-03-15", "2025-03-20"],
-      price: 25
-    },
-    {
-      id: 2,
-      title: "Blackpool Tower & Heritage Walk",
-      description: "Discover the rich history of Blackpool with a guided walking tour, including a visit to the iconic Blackpool Tower and other historic landmarks.",
-      availableDates: ["2025-03-05", "2025-03-12", "2025-03-19"],
-      price: 30
-    },
-    {
-      id: 3,
-      title: "Pleasure Beach VIP Experience",
-      description: "Enjoy a thrilling day at Blackpool Pleasure Beach with fast-track access to rides, exclusive behind-the-scenes insights, and a delicious lunch included.",
-      availableDates: ["2025-03-08", "2025-03-14", "2025-03-22"],
-      price: 60
-    },
-    {
-      id: 4,
-      title: "Coastal Tram Ride & Fish and Chips",
-      description: "Take a relaxing tram ride along the Blackpool coastline, enjoying stunning sea views and ending the tour with a traditional fish and chips meal.",
-      availableDates: ["2025-03-06", "2025-03-13", "2025-03-21"],
-      price: 20
-    },
-    {
-      id: 5,
-      title: "Blackpool Zoo & Nature Walk",
-      description: "A family-friendly tour exploring Blackpool Zoo, where you’ll get up close with a variety of animals before enjoying a scenic nature walk.",
-      availableDates: ["2025-03-07", "2025-03-14", "2025-03-21"],
-      price: 35
-    }
-  ];
-  
+
 
   return (
     <SafeAreaProvider>
@@ -137,13 +150,13 @@ export default function HomeScreen() {
               <Text style={styles.tourDescription}>{item.description}</Text>
               <View style={styles.tourDetails}>
                 <Text style={styles.tourPrice}>Price: £{item.price}</Text>
-                <TouchableOpacity style={styles.button} onPress={toggleVisible}>
+                <TouchableOpacity style={styles.button} onPress={() => toggleOpen(index)}>
                   <Text style={styles.buttonText}>
-                    {isVisible ? 'Hide Tour Dates' : 'View Tour Dates'}
+                    {openDates[index] ? 'Hide Tour Dates' : 'View Tour Dates'}
                   </Text>
                 </TouchableOpacity>
               </View>
-              <View style={{ display: isVisible ? 'flex' : 'none' }}>
+              <View style={{ display: openDates[index] ? 'flex' : 'none' }}>
                 <Text>Available Dates:</Text>
                 {item.availableDates.map((date, index) => (
                   <TouchableOpacity key={index} style={styles.dateButton} onPress={() => addBookedTour({ userUID: userContextValue, TourID: item.id, TourDate: date })}>
