@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, RefreshControl } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { UserContext } from '../_layout';
@@ -53,7 +53,14 @@ export default function HomeScreen() {
     const [openDates, setOpenDates] = useState(Array(cardData.length).fill(false));
 
     const userContextValue = useContext(UserContext);
-
+    const [refreshing, setRefreshing] = React.useState(false);
+    const onRefresh = React.useCallback(() => {
+      getWeatherFromApi();
+      setRefreshing(true);
+      setTimeout(() => {
+        setRefreshing(false);
+      }, 2000);
+    }, []);
 
   const toggleOpen = (index) => {
     setOpenDates((prev) => {
@@ -110,8 +117,9 @@ export default function HomeScreen() {
 
 
   return (
-    <SafeAreaProvider>
-      <ScrollView style={styles.container}>
+    <SafeAreaProvider >
+      <ScrollView style={styles.container} refreshControl={
+                  <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <SafeAreaView style={styles.weatherCard}>
           <View style={styles.todayWeather}>
           <Image source={{ uri: `https://openweathermap.org/img/wn/${weatherToday.weather[0].icon}@2x.png` }} style={{ width: 50, height: 50 }}/>

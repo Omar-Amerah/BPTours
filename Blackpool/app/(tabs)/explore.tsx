@@ -65,8 +65,8 @@ export default function HomeScreen() {
             <ScrollView
           contentContainerStyle={styles.container}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }>
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            >
         <Image source={{ uri: "https://cdn-icons-png.flaticon.com/512/3276/3276535.png" }} style={styles.accountImage} />
         <TouchableOpacity style={styles.accountButton}>
           <Text style={styles.accountButtonText}>Change Email</Text>
