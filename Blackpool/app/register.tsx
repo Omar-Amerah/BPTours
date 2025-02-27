@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
@@ -43,19 +43,22 @@ export default function Register() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
+    <View style={styles.container}> 
+      <Image source={require("../assets/logo.png")} style={styles.logo} />
+      <Text style={styles.title}>Sign Up</Text>
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder="Email Address"
+        placeholderTextColor='rgb(255, 255, 255)'
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
       />
       <TextInput
-        style={styles.input}
+        style={styles.input2}
         placeholder="Password"
+        placeholderTextColor='rgb(255, 255, 255)'
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -63,40 +66,71 @@ export default function Register() {
       <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={loading}>
         {loading ? <ActivityIndicator color="#FFFFFF" /> : <Text style={styles.buttonText}>Register</Text>}
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={handleLoginRedirect}>
-        <Text style={styles.buttonText}>Have an account? Login Here.</Text>
-      </TouchableOpacity>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 3 }}>
+        <Text onPress={handleLoginRedirect} style={styles.buttonText}>Have an Account?</Text>
+        <Text onPress={handleRegister} style={styles.buttonText}>Forgot Password?</Text>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#A5A5A7',
     flex: 1,
     justifyContent: 'center',
     padding: 16,
   },
+  logo: {
+    width: 350,
+    height: 350,
+    alignSelf: 'center',
+    marginBottom: 40,
+  },
   title: {
     fontSize: 24,
     marginBottom: 16,
+    color: '#FFFFFF',
     textAlign: 'center',
   },
+  inputText: {
+    fontSize: 15,
+    color: '#FFFFFF',
+    marginBottom: 5,
+  },
   input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 12,
+    backgroundColor: 'rgb(151, 223, 241)',
+    height: 50,
+    fontSize: 16,
+    borderRadius: 8,
+    marginTop: 40,
+    marginBottom: 20,
     paddingHorizontal: 8,
+    elevation: 10,
+    
+  },
+  input2: {
+    backgroundColor: 'rgb(151, 223, 241)',
+    height: 50,
+    fontSize: 16,
+    borderRadius: 8,
+    marginBottom: 150,
+    paddingHorizontal: 8,
+    elevation: 10,
+
   },
   button: {
-    backgroundColor: '#007BFF',
+    backgroundColor: 'rgb(246, 148, 49)',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 8,
     alignItems: 'center',
     marginVertical: 5,
+    elevation: 5,
   },
   buttonText: {
+    flexDirection: 'row',
+    margin: 5,
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 15,
   },
 });
