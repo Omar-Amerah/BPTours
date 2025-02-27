@@ -50,16 +50,10 @@ export default function HomeScreen() {
   
 
     const [weatherData, setWeatherData] = useState(null);
-    // const [isVisible, setIsVisible] = useState();
     const [openDates, setOpenDates] = useState(Array(cardData.length).fill(false));
 
     const userContextValue = useContext(UserContext);
-    console.log('User context value:', userContextValue);
 
-    //Function to Open/Close Tour Dates
-  //   const toggleVisible = () => {
-  //   setIsVisible(!isVisible);
-  // };
 
   const toggleOpen = (index) => {
     setOpenDates((prev) => {
@@ -74,7 +68,6 @@ export default function HomeScreen() {
     try {
       const newTour = await addDoc(collection(db, "BookedTours"), tourData);
       alert('Tour booked successfully for ' + tourData.TourDate + '!');
-      setIsVisible(false);
       console.log(newTour.id);
     } catch (error) {
       console.error(error);
@@ -83,7 +76,6 @@ export default function HomeScreen() {
 
   //Get Weather Data from OpenWeather API
 	const getWeatherFromApi = async () => {
-    console.log("Getting weather");
     try { return await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=Blackpool,GB&units=metric&appid=${API_KEY}`)
       .then((response) => response.json())
       .then((json) => {
@@ -126,7 +118,7 @@ export default function HomeScreen() {
 
             <View style={{ marginLeft: 10 }}> 
               <Text style={styles.todayLabel}>Today:</Text>
-              <Text style={styles.todayTemp}>{weatherToday.main.temp.toFixed(0)}</Text>
+              <Text style={styles.todayTemp}>{weatherToday.main.temp.toFixed(0)}°C</Text>
             </View>
           </View>
 
@@ -159,7 +151,7 @@ export default function HomeScreen() {
               <View style={{ display: openDates[index] ? 'flex' : 'none' }}>
                 <Text>Available Dates:</Text>
                 {item.availableDates.map((date, index) => (
-                  <TouchableOpacity key={index} style={styles.dateButton} onPress={() => addBookedTour({ userUID: userContextValue, TourID: item.id, TourDate: date })}>
+                  <TouchableOpacity key={index} style={styles.dateButton} onPress={() => addBookedTour({ userUID: userContextValue, TourID: item.id, TourName:item.title, TourDescription:item.description, TourPrice:item.price, TourDate: date })}>
                     <Text style={styles.dateButtonText} key={index}>Book for: {date}</Text>
                   </TouchableOpacity>
                 ))}
